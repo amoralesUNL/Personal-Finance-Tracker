@@ -11,7 +11,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Newtonsoft.Json.Serialization;
 
-namespace RestaurantMiddleware
+namespace PersonalFinanceTracker
 {
     public class Startup
     {
