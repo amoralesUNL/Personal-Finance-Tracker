@@ -17,11 +17,36 @@ namespace PersonalFinanceTracker.Controllers
             _configuration = configuration;
         }
 
+        private static readonly string[] IncomeTypes = new[]
+        {
+            "Income", "Investments", "Savings"
+        };
+
+        private static readonly string[] TransactionTypes = new[]
+        {
+                "Income",
+                "Cash Withdrawal",
+                "Entertainment",
+                "Dining",
+                "Grocery",
+                "Transportation",
+                "Shopping",
+                "Housing & Utilities",
+                "Health & Wellness",
+                "Miscellaneous",
+                "Debt Payment",
+                "Savings",
+                "Investments",
+                "Education"
+            };
+
 
         [HttpGet]
         public JsonResult Get()
         {
-            string query = @"SELECT Id, Amount, Type, TransactionDate FROM Transactions;";
+            string query = @"SELECT * 
+                            FROM Transactions
+                            ORDER BY TransactionDate DESC;";
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("AppCon");
 
@@ -62,6 +87,42 @@ namespace PersonalFinanceTracker.Controllers
 
         }
 
+        [HttpGet("monthly-spending")]
+        public JsonResult GetMonthlySpending() {
+
+            string query = @"SELECT 
+            FORMAT(TransactionDate, 'yyyy-MM') AS MonthYear,
+            SUM(Amount) AS TotalSpending
+            FROM Transactions
+            WHERE TransactionType NOT IN ('Income','Investments','Savings')
+            GROUP BY FORMAT(TransactionDate, 'yyyy-MM;";
+
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("AppCon");
+
+            try
+            {
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon)) 
+                    {
+                        myCommand.Parameters.AddWithValue("@IncomeTypes", string.Join(",", IncomeTypes));
+
+                        using (SqlDataReader myReader = myCommand.ExecuteReader())
+                        {
+                            table.Load(myReader);
+                            myReader.Close();
+                            myCon.Close();
+                        }
+                    }
+                }
+            }
+            catch { 
+            }
+
+            return new JsonResult(table);
+        }
     }
 
 

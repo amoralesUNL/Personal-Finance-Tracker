@@ -61,9 +61,6 @@ namespace PersonalFinanceTracker.Controllers
             .ToArray();
        
 
-            decimal IncomeAmount = 0;
-            decimal SpendingAmount = 0;
-
 
         }
         
