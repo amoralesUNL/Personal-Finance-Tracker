@@ -95,7 +95,7 @@ namespace PersonalFinanceTracker.Controllers
             SUM(Amount) AS TotalSpending
             FROM Transactions
             WHERE TransactionType NOT IN ('Income','Investments','Savings')
-            GROUP BY FORMAT(TransactionDate, 'yyyy-MM;";
+            GROUP BY FORMAT(TransactionDate, 'yyyy-MM');";
 
             DataTable table = new DataTable();
             string sqlDatasource = _configuration.GetConnectionString("AppCon");
@@ -118,12 +118,96 @@ namespace PersonalFinanceTracker.Controllers
                     }
                 }
             }
-            catch { 
+            catch {
+                return new JsonResult(new { error = "An error occurred while retrieving data.", });
+            }
+
+            return new JsonResult(table);
+        }
+
+        [HttpGet("yearly-income")]
+        public JsonResult GetYearlyIncome()
+        {
+
+            string query = @"SELECT 
+                            COALESCE(TransactionType, 'Total') AS TransactionType,
+                            SUM(Amount) AS TotalAmount 
+                            FROM Transactions 
+                            WHERE TransactionType IN ('Income', 'Investments', 'Savings') 
+                            GROUP BY ROLLUP(TransactionType);";
+
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("AppCon");
+
+            try
+            {
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@IncomeTypes", string.Join(",", IncomeTypes));
+
+                        using (SqlDataReader myReader = myCommand.ExecuteReader())
+                        {
+                            table.Load(myReader);
+                            myReader.Close();
+                            myCon.Close();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return new JsonResult(new { error = "An error occurred while retrieving data.", });
+            }
+
+            return new JsonResult(table);
+        }
+
+        [HttpGet("yearly-spending")]
+        public JsonResult GetYearlySpending()
+        {
+
+            string query = @"SELECT 
+                            COALESCE(TransactionType, 'Total') AS TransactionType,
+                            SUM(Amount) AS TotalAmount 
+                            FROM Transactions 
+                            WHERE TransactionType NOT IN ('Income', 'Investments', 'Savings') 
+                            GROUP BY ROLLUP(TransactionType);";
+
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("AppCon");
+
+            try
+            {
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@IncomeTypes", string.Join(",", IncomeTypes));
+
+                        using (SqlDataReader myReader = myCommand.ExecuteReader())
+                        {
+                            table.Load(myReader);
+                            myReader.Close();
+                            myCon.Close();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return new JsonResult(new { error = "An error occurred while retrieving data.", });
             }
 
             return new JsonResult(table);
         }
     }
 
+   
+ }
 
-}
+
+
