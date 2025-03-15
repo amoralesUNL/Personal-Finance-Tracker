@@ -125,6 +125,45 @@ namespace PersonalFinanceTracker.Controllers
             return new JsonResult(table);
         }
 
+        [HttpGet("monthly-income")]
+        public JsonResult GetMonthlyIncome()
+        {
+
+            string query = @"SELECT FORMAT(TransactionDate, 'yyyy-MM') AS MonthYear, 
+                            SUM(Amount) AS TotalSpending
+                            FROM Transactions 
+                            WHERE TransactionType in ('Income','Investments','Savings')
+                            GROUP BY FORMAT(TransactionDate, 'yyyy-MM');";
+
+            DataTable table = new DataTable();
+            string sqlDatasource = _configuration.GetConnectionString("AppCon");
+
+            try
+            {
+                using (SqlConnection myCon = new SqlConnection(sqlDatasource))
+                {
+                    myCon.Open();
+                    using (SqlCommand myCommand = new SqlCommand(query, myCon))
+                    {
+                        myCommand.Parameters.AddWithValue("@IncomeTypes", string.Join(",", IncomeTypes));
+
+                        using (SqlDataReader myReader = myCommand.ExecuteReader())
+                        {
+                            table.Load(myReader);
+                            myReader.Close();
+                            myCon.Close();
+                        }
+                    }
+                }
+            }
+            catch
+            {
+                return new JsonResult(new { error = "An error occurred while retrieving data.", });
+            }
+
+            return new JsonResult(table);
+        }
+
         [HttpGet("yearly-income")]
         public JsonResult GetYearlyIncome()
         {

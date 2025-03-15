@@ -1,4 +1,4 @@
-import React, { Component, use } from "react";
+import React, { Component } from "react";
 import { variables } from "./Variables";
 import { Bar, Doughnut } from "react-chartjs-2";
 import {
@@ -22,13 +22,32 @@ ChartJS.register(
   ArcElement
 );
 
+const fullMonthList = [
+  "2025-01",
+  "2025-02",
+  "2025-03",
+  "2025-04",
+  "2025-05",
+  "2025-06",
+  "2025-07",
+  "2025-08",
+  "2025-09",
+  "2025-10",
+  "2025-11",
+  "2025-12",
+];
+
 export class Home extends Component {
   constructor(props) {
     super(props);
     this.state = {
       monthlySpending: [],
+      monthlyIncome: [],
       yearlyIncome: [],
       yearlySpending: [],
+      barLabels: [],
+      barMonthlyData: [],
+      barTitle: "",
     };
   }
 
@@ -38,6 +57,18 @@ export class Home extends Component {
       .then((data) => {
         console.log("Fetched data:", data); // Log the data to verify it's fetched
         this.setState({ monthlySpending: data });
+      })
+      .catch((error) => {
+        console.error("Error fetching transactions:", error);
+      });
+  }
+
+  refreshMonthlyIncomeList() {
+    fetch(variables.API_URL + "transaction/monthly-income")
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Fetched data:", data); // Log the data to verify it's fetched
+        this.setState({ monthlyIncome: data });
       })
       .catch((error) => {
         console.error("Error fetching transactions:", error);
@@ -69,16 +100,71 @@ export class Home extends Component {
   }
   componentDidMount() {
     this.refreshMonthlySpendingList();
+    this.refreshMonthlyIncomeList();
     this.refreshYearlyIncomeList();
     this.refreshYearlySpendingList();
   }
 
-  render() {
-    const { monthlySpending, yearlyIncome, yearlySpending } = this.state;
+  fetchData = () => {
+    if (this.state.monthlySpending.length > 0) {
+      const barMonthlyData = fullMonthList.map((month) => {
+        const monthData = this.state.monthlySpending.find(
+          (entry) => entry.MonthYear === month
+        );
+        return monthData ? monthData.TotalSpending : 0;
+      });
 
-    // Bar Graph Data
-    const labels = monthlySpending.map((entry) => entry.MonthYear); // X-axis labels
-    const spendingData = monthlySpending.map((entry) => entry.TotalSpending); // Y-axis values
+      this.setState({
+        barLabels: fullMonthList,
+        barMonthlyData,
+        barTitle: "Monthly Spending ($)",
+      });
+    }
+  };
+  componentDidUpdate(prevProps, prevState) {
+    if (prevState.monthlySpending !== this.state.monthlySpending) {
+      this.fetchData();
+    }
+  }
+
+  monthlyExpenseButton = () => {
+    const spendData = fullMonthList.map((month) => {
+      const monthData = this.state.monthlySpending.find(
+        (entry) => entry.MonthYear === month
+      );
+      return monthData ? monthData.TotalSpending : 0;
+    });
+
+    this.setState({
+      barMonthlyData: spendData,
+      barLabels: fullMonthList,
+      barTitle: "Monthly Spending ($)",
+    });
+  };
+  monthlyIncomeButton = () => {
+    const incomeData = fullMonthList.map((month) => {
+      const monthData = this.state.monthlyIncome.find(
+        (entry) => entry.MonthYear === month
+      );
+      return monthData ? monthData.TotalSpending : 0;
+    });
+
+    this.setState({
+      barMonthlyData: incomeData,
+      barLabels: fullMonthList,
+      barTitle: "Monthly Income ($)",
+    });
+  };
+
+  render() {
+    const {
+      yearlyIncome,
+      yearlySpending,
+      barLabels,
+      barMonthlyData,
+      barTitle,
+    } = this.state;
+
     //Doughnut Income Data
     const yearlyIncomeLabels = yearlyIncome
       .filter((entry) => entry.TransactionType !== "Total")
@@ -92,20 +178,21 @@ export class Home extends Component {
 
     //Doughnut Spending Data
     const yearlyExpenseLabels = yearlySpending
-      .filter((entry) => entry.TransactionType != "Total")
+      .filter((entry) => entry.TransactionType !== "Total")
       .map((entry) => entry.TransactionType);
     const yearlyExpenseData = yearlySpending
-      .filter((entry) => entry.TransactionType != "Total")
+      .filter((entry) => entry.TransactionType !== "Total")
       .map((entry) => entry.TotalAmount);
     const TotalExpense = yearlySpending
       .filter((entry) => entry.TransactionType === "Total")
       .map((entry) => entry.TotalAmount);
-    const data = {
-      labels: labels,
+
+    const spendingBarData = {
+      labels: barLabels,
       datasets: [
         {
-          label: "Monthly Spending ($)",
-          data: spendingData,
+          label: barTitle,
+          data: barMonthlyData,
           backgroundColor: "rgba(75, 192, 192, 0.6)",
           borderColor: "rgba(75, 192, 192, 1)",
           borderWidth: 1,
@@ -122,7 +209,7 @@ export class Home extends Component {
         },
         tooltip: {
           callbacks: {
-            label: (context) => `$${context.raw}`, // Format tooltip to show dollar values
+            label: (context) => `$${context.raw}`,
           },
         },
       },
@@ -243,7 +330,7 @@ export class Home extends Component {
         const xCenter = width / 2;
         const yCenter = top + bottom / 2;
 
-        const largeFontSize = Math.round(width / 8);
+        const largeFontSize = Math.round(width / 8); // Set Dynamic Text Size
         const smallFontSize = Math.round(width / 20);
 
         ctx.save();
@@ -283,11 +370,82 @@ export class Home extends Component {
           </div>
         </div>
         <div
-          style={{ display: "flex", width: "100%", justifyContent: "center" }}
+          style={{
+            display: "flex",
+            width: "100%",
+            justifyContent: "right",
+            paddingRight: "20px",
+          }}
         >
-          <div style={{ width: "50%" }}>
+          <div style={{ width: "52%" }}>
+            <div
+              class="dropdown"
+              style={{ display: "flex", justifyContent: "flex-end" }}
+            >
+              <button
+                class="btn btn-outline-primary dropdown-toggle"
+                type="button"
+                id="dropdownMenuButton"
+                data-bs-toggle="dropdown"
+                aria-haspopup="true"
+                aria-expanded="false"
+              >
+                Filter
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="\transaction">
+                  Action
+                </a>
+                <a class="dropdown-item" href="\transaction">
+                  Another action
+                </a>
+              </div>
+            </div>
             <div style={{ height: "450px", justifyContet: "center" }}>
-              <Bar data={data} options={options} />
+              <Bar data={spendingBarData} options={options} />
+            </div>
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "flex-start",
+                paddingLeft: "60px",
+                gap: "10px",
+              }}
+            >
+              {" "}
+              <button
+                onClick={this.monthlyExpenseButton}
+                type="button"
+                class="btn btn-outline-primary"
+              >
+                Monthly Spending
+              </button>
+              <button
+                onClick={this.monthlyIncomeButton}
+                type="button"
+                class="btn btn-outline-primary"
+              >
+                Monthly Income
+              </button>
+              <button type="button" class="btn btn-outline-primary"></button>
+            </div>
+          </div>
+          <div style={{ paddingLeft: "20px", width: "350px", height: "460px" }}>
+            {" "}
+            <div class="card" style={{ width: "100%", height: "100%" }}>
+              <div
+                class="card-body"
+                style={{ display: "flex", flexDirection: "column" }}
+              >
+                <div style={{ flex: "1", padding: "10px" }}>
+                  <h5 class="card-title"> Notifications </h5>
+                  <p class="card-text"> No due payments</p>
+                </div>
+                <div style={{ flex: "1", padding: "10px" }}>
+                  <h5>Upcoming payments</h5>
+                  <p>Cool More Text</p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
