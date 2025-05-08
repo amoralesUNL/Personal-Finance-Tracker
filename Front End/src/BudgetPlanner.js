@@ -1,6 +1,6 @@
 import "./Styles.css";
 import React, { Component } from "react";
-//import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 export class BudgetPlanner extends Component {
   render() {
     return (
@@ -8,13 +8,14 @@ export class BudgetPlanner extends Component {
         <div style={{ textAlign: "left", paddingTop: "10px" }}>
           <h2>Budget Planner </h2>
         </div>
+
         <div>
           <nav className=" navbar navbar-expand-lg bg-white">
             <ul className="navContent nav nav-underline fs-5">
               <li className=" nav-item">
-                <a className="nav-link" href="/housingExpenses">
+                <NavLink className="nav-link" to="/budgetplanner/income">
                   Income
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
                 <a className="nav-link" href="/housingExpenses">
@@ -44,6 +45,7 @@ export class BudgetPlanner extends Component {
             </ul>
           </nav>
         </div>
+        <Outlet />
       </div>
     );
   }

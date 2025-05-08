@@ -6,6 +6,7 @@ import { Home } from "./Home";
 import { Transactionspage } from "./User";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import { BudgetPlanner } from "./BudgetPlanner";
+import { IncomePlanner } from "./IncomePlanner";
 
 function App() {
   return (
@@ -41,6 +42,11 @@ function App() {
           <Route path="/home" element={<Home />} />
           <Route path="/transactions" element={<Transactionspage />} />
           <Route path="/budgetplanner" element={<BudgetPlanner />} />
+          <Route path="/incomePlanner" element={<IncomePlanner />} />
+
+          <Route path="/budgetplanner/*" element={<BudgetPlanner />}>
+            <Route path="income" element={<IncomePlanner />} />
+          </Route>
         </Routes>
       </div>
     </BrowserRouter>
