@@ -5,6 +5,7 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 import { Home } from "./Home";
 import { Transactionspage } from "./User";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import { BudgetPlanner } from "./BudgetPlanner";
 
 function App() {
   return (
@@ -28,9 +29,9 @@ function App() {
             <li className="nav-item m-1">
               <NavLink
                 className="btn btn-light btn-outline-primary"
-                to="/about"
+                to="/budgetplanner"
               >
-                About
+                Budget Planner
               </NavLink>
             </li>
           </ul>
@@ -39,6 +40,7 @@ function App() {
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/transactions" element={<Transactionspage />} />
+          <Route path="/budgetplanner" element={<BudgetPlanner />} />
         </Routes>
       </div>
     </BrowserRouter>
