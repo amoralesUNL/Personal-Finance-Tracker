@@ -7,6 +7,10 @@ import { Transactionspage } from "./User";
 import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
 import { BudgetPlanner } from "./BudgetPlanner";
 import { IncomePlanner } from "./IncomePlanner";
+import { HousingPlanner } from "./HousingPlanner";
+import { LivingPlanner } from "./LivingPlanner";
+import { TravelPlanner } from "./TravelPlanner";
+import { EntertainmentPlanner } from "./EntertainmentPlanner";
 
 function App() {
   return (
@@ -46,6 +50,10 @@ function App() {
 
           <Route path="/budgetplanner/*" element={<BudgetPlanner />}>
             <Route path="income" element={<IncomePlanner />} />
+            <Route path="housing" element={<HousingPlanner />} />
+            <Route path="living" element={<LivingPlanner />} />
+            <Route path="travel" element={<TravelPlanner />} />
+            <Route path="entertainment" element={<EntertainmentPlanner />} />
           </Route>
         </Routes>
       </div>

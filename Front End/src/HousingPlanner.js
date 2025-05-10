@@ -1,12 +1,12 @@
 import React, { Component } from "react";
 
-export class IncomePlanner extends Component {
+export class HousingPlanner extends Component {
   render() {
     return (
       <div>
         <div style={{ textAlign: "left", paddingLeft: "5px" }}>
           <div>
-            <h5>Pay</h5>
+            <h5>Mortgage</h5>
           </div>
           <div style={{ paddingBottom: "10px" }}>
             <div className="input-group" style={{ width: "220px" }}>
@@ -27,7 +27,7 @@ export class IncomePlanner extends Component {
           </div>
 
           <div>
-            <h5>Self Employment Income</h5>
+            <h5>Rent</h5>
           </div>
           <div style={{ paddingBottom: "10px" }}>
             <div className="input-group" style={{ width: "220px" }}>
@@ -47,7 +47,7 @@ export class IncomePlanner extends Component {
             </div>
           </div>
           <div>
-            <h5>Pension</h5>
+            <h5>Home Insurance</h5>
           </div>
           <div style={{ paddingBottom: "10px" }}>
             <div className="input-group" style={{ width: "220px" }}>
@@ -67,7 +67,7 @@ export class IncomePlanner extends Component {
             </div>
           </div>
           <div>
-            <h5>Investments</h5>
+            <h5>Property Taxes</h5>
           </div>
           <div style={{ paddingBottom: "10px" }}>
             <div className="input-group" style={{ width: "220px" }}>
@@ -87,7 +87,7 @@ export class IncomePlanner extends Component {
             </div>
           </div>
           <div>
-            <h5>Additional Income</h5>
+            <h5>Home Maintenance</h5>
           </div>
           <div style={{ paddingBottom: "10px" }}>
             <div className="input-group" style={{ width: "220px" }}>

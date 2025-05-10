@@ -9,7 +9,7 @@ export class BudgetPlanner extends Component {
           <h2>Budget Planner </h2>
         </div>
 
-        <div>
+        <div style={{ width: "50%" }}>
           <nav className=" navbar navbar-expand-lg bg-white">
             <ul className="navContent nav nav-underline fs-5">
               <li className=" nav-item">
@@ -18,34 +18,43 @@ export class BudgetPlanner extends Component {
                 </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/housingExpenses">
+                <NavLink className="nav-link" to="/budgetplanner/housing">
                   Housing Expenses
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/housingExpenses">
+                <NavLink className="nav-link" to="/budgetplanner/living">
                   Living Expenses
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/housingExpenses">
+                <NavLink className="nav-link" to="/budgetplanner/travel">
                   Travel
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/housingExpenses">
+                <NavLink className="nav-link" to="/budgetplanner/entertainment">
                   Entertainment
-                </a>
+                </NavLink>
               </li>
               <li className="nav-item">
-                <a className="nav-link" href="/housingExpenses">
+                <NavLink className="nav-link" to="/budgetplanner/summary">
                   Summary
-                </a>
+                </NavLink>
               </li>
             </ul>
           </nav>
         </div>
-        <Outlet />
+
+        <div style={{ display: "flex", padding: "5px" }}>
+          {/* Left: Render the selected component via Outlet */}
+          <div style={{ flex: 1, paddingRight: "20px" }}>
+            <Outlet />
+          </div>
+
+          {/* Right: Chart area */}
+          <div style={{ flex: 1 }}>Bar chart here</div>
+        </div>
       </div>
     );
   }
