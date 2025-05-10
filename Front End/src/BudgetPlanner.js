@@ -46,14 +46,69 @@ export class BudgetPlanner extends Component {
           </nav>
         </div>
 
-        <div style={{ display: "flex", padding: "5px" }}>
-          {/* Left: Render the selected component via Outlet */}
-          <div style={{ flex: 1, paddingRight: "20px" }}>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "left",
+            paddingLeft: "5px",
+          }}
+        >
+          {/*Left Side Outlet Component*/}
+          <div style={{ display: "flex", width: "50%" }}>
             <Outlet />
           </div>
 
-          {/* Right: Chart area */}
-          <div style={{ flex: 1 }}>Bar chart here</div>
+          {/* Right Side Chart Component */}
+          <div
+            style={{
+              display: "flex",
+              backgroundColor: "white",
+              width: "275px",
+              height: "350px",
+              outline: "2px solid black",
+              borderRadius: "10px",
+            }}
+          >
+            <div style={{ paddingLeft: "25px" }}>
+              <h2>Summary</h2>
+              <div
+                style={{
+                  width: "230px",
+                  height: "75px",
+                  backgroundColor: "#f5f5f5",
+                  borderRadius: "5px",
+                  outline: "2px solid black",
+                  marginBottom: "16px",
+                }}
+              >
+                <p>Income </p>
+              </div>
+              <div
+                style={{
+                  width: "230px",
+                  height: "75px",
+                  backgroundColor: "#f5f5f5",
+                  outline: "2px solid black",
+                  borderRadius: "5px",
+                  marginBottom: "16px",
+                }}
+              >
+                <p>Expenses </p>
+              </div>
+              <div
+                style={{
+                  width: "230px",
+                  height: "75px",
+                  backgroundColor: "#f5f5f5",
+                  outline: "2px solid black",
+                  borderRadius: "5px",
+                  marginBottom: "16px",
+                }}
+              >
+                <p>Spare Cash </p>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
