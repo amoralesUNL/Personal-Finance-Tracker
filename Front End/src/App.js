@@ -4,7 +4,13 @@ import "bootstrap/dist/js/bootstrap.bundle.min";
 
 import { Home } from "./Home";
 import { Transactionspage } from "./User";
-import { BrowserRouter, Routes, Route, NavLink } from "react-router-dom";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  NavLink,
+  Navigate,
+} from "react-router-dom";
 import { BudgetPlanner } from "./BudgetPlanner";
 import { IncomePlanner } from "./IncomePlanner";
 import { HousingPlanner } from "./HousingPlanner";
@@ -45,10 +51,11 @@ function App() {
         <Routes>
           <Route path="/home" element={<Home />} />
           <Route path="/transactions" element={<Transactionspage />} />
-          <Route path="/budgetplanner" element={<BudgetPlanner />} />
+          <Route path="/budgetplanner/" element={<BudgetPlanner />} />
           <Route path="/incomePlanner" element={<IncomePlanner />} />
 
           <Route path="/budgetplanner/*" element={<BudgetPlanner />}>
+            <Route index element={<Navigate to="income" replace />} />
             <Route path="income" element={<IncomePlanner />} />
             <Route path="housing" element={<HousingPlanner />} />
             <Route path="living" element={<LivingPlanner />} />

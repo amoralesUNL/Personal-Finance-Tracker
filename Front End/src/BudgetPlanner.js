@@ -1,7 +1,22 @@
 import "./Styles.css";
-import React, { Component } from "react";
+import { Component } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import { PlannerStateContext } from "./PlannerStateContext";
 export class BudgetPlanner extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      summaryIncome: 0,
+      summaryExpense: 0,
+    };
+  }
+
+  setSummaryIncome = (income) => {
+    this.setState({ summaryIncome: income }, () => {
+      console.log("State Updated", this.state.summaryIncome);
+    });
+  };
+
   render() {
     return (
       <div>
@@ -54,9 +69,17 @@ export class BudgetPlanner extends Component {
           }}
         >
           {/*Left Side Outlet Component*/}
-          <div style={{ display: "flex", width: "50%" }}>
-            <Outlet />
-          </div>
+          <PlannerStateContext.Provider
+            value={{
+              summaryIncome: this.state.summaryIncome,
+              summaryExpense: this.state.summaryExpense,
+              setSummaryIncome: this.setSummaryIncome,
+            }}
+          >
+            <div style={{ display: "flex", width: "50%" }}>
+              <Outlet />
+            </div>
+          </PlannerStateContext.Provider>
 
           {/* Right Side Chart Component */}
           <div
@@ -81,7 +104,7 @@ export class BudgetPlanner extends Component {
                   marginBottom: "16px",
                 }}
               >
-                <p>Income </p>
+                <p>Income </p> <p>{this.state.summaryIncome}</p>
               </div>
               <div
                 style={{
