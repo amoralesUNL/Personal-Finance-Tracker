@@ -8,6 +8,10 @@ export class BudgetPlanner extends Component {
     this.state = {
       summaryIncome: 0,
       summaryExpense: 0,
+      housing: 0,
+      living: 0,
+      travel: 0,
+      ent: 0,
     };
   }
 
@@ -15,6 +19,35 @@ export class BudgetPlanner extends Component {
     this.setState({ summaryIncome: income }, () => {
       console.log("State Updated", this.state.summaryIncome);
     });
+  };
+
+  setSummaryExpense = () => {
+    this.setState(
+      {
+        summaryExpense:
+          this.state.housing +
+          this.state.living +
+          this.state.travel +
+          this.state.ent,
+      },
+      () => {
+        console.log("State Updated", this.state.summaryExpense);
+      }
+    );
+  };
+  setHousingExpense = (expense) => {
+    this.setState({ housing: expense }, () => {
+      this.setSummaryExpense();
+    });
+  };
+  setLivingExpense = (expense) => {
+    this.setState({ living: expense });
+  };
+  setTravelExpense = (expense) => {
+    this.setState({ travel: expense });
+  };
+  setEntExpense = (expense) => {
+    this.setState({ ent: expense });
   };
 
   render() {
@@ -74,6 +107,11 @@ export class BudgetPlanner extends Component {
               summaryIncome: this.state.summaryIncome,
               summaryExpense: this.state.summaryExpense,
               setSummaryIncome: this.setSummaryIncome,
+              setSummaryExpense: this.setSummaryExpense,
+              setHousingExpense: this.setHousingExpense,
+              setLivingExpense: this.setLivingExpense,
+              setTravelExpense: this.setTravelExpense,
+              setEntExpense: this.setEntExpense,
             }}
           >
             <div style={{ display: "flex", width: "50%" }}>
@@ -116,7 +154,7 @@ export class BudgetPlanner extends Component {
                   marginBottom: "16px",
                 }}
               >
-                <p>Expenses </p>
+                <p>Expenses</p> <p>{this.state.summaryExpense}</p>
               </div>
               <div
                 style={{
