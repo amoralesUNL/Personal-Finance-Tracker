@@ -25,10 +25,10 @@ export class BudgetPlanner extends Component {
     this.setState(
       {
         summaryExpense:
-          this.state.housing +
-          this.state.living +
-          this.state.travel +
-          this.state.ent,
+          (Number(this.state.housing) || 0) +
+          (Number(this.state.living) || 0) +
+          (Number(this.state.travel) || 0) +
+          (Number(this.state.ent) || 0),
       },
       () => {
         console.log("State Updated", this.state.summaryExpense);
@@ -41,7 +41,9 @@ export class BudgetPlanner extends Component {
     });
   };
   setLivingExpense = (expense) => {
-    this.setState({ living: expense });
+    this.setState({ living: expense }, () => {
+      this.setSummaryExpense();
+    });
   };
   setTravelExpense = (expense) => {
     this.setState({ travel: expense });

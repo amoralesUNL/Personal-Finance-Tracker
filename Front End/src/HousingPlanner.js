@@ -19,9 +19,12 @@ export class HousingPlanner extends Component {
   };
   handleInputChange = (event, setHousingExpense) => {
     const { name, value } = event.target;
+    //Prevent Delete Key From setting NaN value
+    const newValue = value === "" ? 0 : Number(value);
+
     this.setState(
       (prevState) => {
-        return { [name]: parseFloat(value) };
+        return { [name]: parseFloat(newValue) };
       },
       () => {
         this.handleExpenseChange(setHousingExpense);
@@ -32,7 +35,7 @@ export class HousingPlanner extends Component {
   render() {
     return (
       <PlannerStateContext.Consumer>
-        {({ setHousingExpense, setSummaryExpense }) => (
+        {({ setHousingExpense }) => (
           <div>
             <div style={{ textAlign: "left", paddingLeft: "5px" }}>
               <div>
