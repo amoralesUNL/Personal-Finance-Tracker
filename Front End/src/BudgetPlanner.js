@@ -46,7 +46,9 @@ export class BudgetPlanner extends Component {
     });
   };
   setTravelExpense = (expense) => {
-    this.setState({ travel: expense });
+    this.setState({ travel: expense }, () => {
+      this.setSummaryExpense();
+    });
   };
   setEntExpense = (expense) => {
     this.setState({ ent: expense });
