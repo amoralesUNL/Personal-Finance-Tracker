@@ -51,7 +51,10 @@ export class BudgetPlanner extends Component {
     });
   };
   setEntExpense = (expense) => {
-    this.setState({ ent: expense });
+    this.setState({ ent: expense }, () => {
+      this.setSummaryExpense();
+      console.log(this.ent);
+    });
   };
 
   render() {
