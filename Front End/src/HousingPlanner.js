@@ -5,28 +5,37 @@ export class HousingPlanner extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      mortgage: 0,
-      rent: 0,
-      insurance: 0,
-      taxes: 0,
-      maintenance: 0,
+      mortgage: localStorage.getItem("mortgage") || "",
+      rent: localStorage.getItem("rent") || "",
+      insurance: localStorage.getItem("insurance") || "",
+      taxes: localStorage.getItem("taxes") || "",
+      maintenance: localStorage.getItem("maintenance") || "",
     };
   }
   handleExpenseChange = (setHousingExpense) => {
     const { mortgage, rent, insurance, taxes, maintenance } = this.state;
-    let total = mortgage + rent + insurance + taxes + maintenance;
+    let total =
+      (Number(mortgage) || 0) +
+      (Number(rent) || 0) +
+      (Number(insurance) || 0) +
+      (Number(taxes) || 0) +
+      (Number(maintenance) || 0);
     setHousingExpense(total);
   };
   handleInputChange = (event, setHousingExpense) => {
     const { name, value } = event.target;
-    //Prevent Delete Key From setting NaN value
-    const newValue = value === "" ? 0 : Number(value);
 
     this.setState(
       (prevState) => {
-        return { [name]: parseFloat(newValue) };
+        return { [name]: parseFloat(value) };
       },
       () => {
+        if (value === "") {
+          localStorage.removeItem(name);
+        } else {
+          localStorage.setItem(name, value);
+        }
+
         this.handleExpenseChange(setHousingExpense);
       }
     );
@@ -50,6 +59,7 @@ export class HousingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.mortgage}
                     name="mortgage"
                     type="number"
                     className="form-control"
@@ -58,7 +68,6 @@ export class HousingPlanner extends Component {
                     style={{ height: "50px", fontSize: "18px" }}
                     onChange={(event) => {
                       this.handleInputChange(event, setHousingExpense);
-                      console.log("Mortgage", this.state.mortgage);
                     }}
                   />
                 </div>
@@ -76,6 +85,7 @@ export class HousingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.rent}
                     name="rent"
                     type="number"
                     className="form-control"
@@ -100,6 +110,7 @@ export class HousingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.insurance}
                     name="insurance"
                     type="number"
                     className="form-control"
@@ -124,6 +135,7 @@ export class HousingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.taxes}
                     name="taxes"
                     type="number"
                     className="form-control"
@@ -148,6 +160,7 @@ export class HousingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.maintenance}
                     name="maintenance"
                     type="number"
                     className="form-control"
