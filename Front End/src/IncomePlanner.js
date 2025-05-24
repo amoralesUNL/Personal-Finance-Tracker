@@ -5,18 +5,23 @@ export class IncomePlanner extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      pay: 0,
-      selfEmployment: 0,
-      pension: 0,
-      investments: 0,
-      additional: 0,
+      pay: localStorage.getItem("pay") || "",
+      selfEmployment: localStorage.getItem("selfEmployment") || "",
+      pension: localStorage.getItem("pension") || "",
+      investments: localStorage.getItem("investments") || "",
+      additionalIncome: localStorage.getItem("additionalIncome") || "",
     };
   }
 
   handleIncomeChange = (setSummaryIncome) => {
-    const { pay, selfEmployment, pension, investments, additional } =
+    const { pay, selfEmployment, pension, investments, additionalIncome } =
       this.state;
-    let total = pay + selfEmployment + pension + investments + additional;
+    let total =
+      (Number(pay) || 0) +
+      (Number(selfEmployment) || 0) +
+      (Number(pension) || 0) +
+      (Number(investments) || 0) +
+      (Number(additionalIncome) || 0);
 
     setSummaryIncome(total);
   };
@@ -31,6 +36,11 @@ export class IncomePlanner extends Component {
         };
       },
       () => {
+        if (value === "") {
+          localStorage.removeItem(name);
+        } else {
+          localStorage.setItem(name, value);
+        }
         this.handleIncomeChange(setSummaryIncome);
       }
     );
@@ -54,6 +64,7 @@ export class IncomePlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.pay}
                     type="number"
                     name="pay"
                     className="form-control"
@@ -79,6 +90,7 @@ export class IncomePlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.selfEmployment}
                     type="number"
                     name="selfEmployment"
                     className="form-control"
@@ -103,6 +115,7 @@ export class IncomePlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.pension}
                     type="number"
                     name="pension"
                     className="form-control"
@@ -127,6 +140,7 @@ export class IncomePlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.investments}
                     type="number"
                     name="investments"
                     className="form-control"
@@ -151,8 +165,9 @@ export class IncomePlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.additionalIncome}
                     type="number"
-                    name="additional"
+                    name="additionalIncome"
                     className="form-control"
                     aria-label="Amount"
                     aria-describedby="dollar-addon"

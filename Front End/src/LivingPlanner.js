@@ -4,15 +4,15 @@ export class LivingPlanner extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      groceries: 0,
-      alcohol: 0,
-      lunch: 0,
-      coffee: 0,
-      clothing: 0,
-      shoes: 0,
-      laundary: 0,
-      toiletries: 0,
-      dental: 0,
+      groceries: localStorage.getItem("groceries") || "",
+      alcohol: localStorage.getItem("alcohol") || "",
+      lunch: localStorage.getItem("lunch") || "",
+      coffee: localStorage.getItem("coffee") || "",
+      clothing: localStorage.getItem("clothing") || "",
+      shoes: localStorage.getItem("shoes") || "",
+      laundary: localStorage.getItem("laundary") || "",
+      toiletries: localStorage.getItem("toiletries") || "",
+      dental: localStorage.getItem("dental") || "",
     };
   }
   handleExpenseChange = (setLivingExpense) => {
@@ -28,28 +28,31 @@ export class LivingPlanner extends Component {
       dental,
     } = this.state;
     let total =
-      groceries +
-      alcohol +
-      lunch +
-      coffee +
-      clothing +
-      shoes +
-      laundary +
-      toiletries +
-      dental;
+      (Number(groceries) || 0) +
+      (Number(alcohol) || 0) +
+      (Number(lunch) || 0) +
+      (Number(coffee) || 0) +
+      (Number(clothing) || 0) +
+      (Number(shoes) || 0) +
+      (Number(laundary) || 0) +
+      (Number(toiletries) || 0) +
+      (Number(dental) || 0);
 
     setLivingExpense(total);
   };
   handleInputChange = (event, setLivingExpense) => {
     const { name, value } = event.target;
-    //Prevent Delete Key From setting NaN value
-    const newValue = value === "" ? 0 : Number(value);
 
     this.setState(
       (prevState) => {
-        return { [name]: parseFloat(newValue) };
+        return { [name]: parseFloat(value) };
       },
       () => {
+        if (value === "") {
+          localStorage.removeItem(name);
+        } else {
+          localStorage.setItem(name, value);
+        }
         this.handleExpenseChange(setLivingExpense);
       }
     );
@@ -72,6 +75,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.groceries}
                     name="groceries"
                     type="number"
                     className="form-control"
@@ -98,6 +102,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.alcohol}
                     name="alcohol"
                     type="number"
                     className="form-control"
@@ -122,6 +127,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.lunch}
                     name="lunch"
                     type="number"
                     className="form-control"
@@ -146,6 +152,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.coffee}
                     name="coffee"
                     type="number"
                     className="form-control"
@@ -170,6 +177,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    valie={this.state.clothing}
                     name="clothing"
                     type="number"
                     className="form-control"
@@ -194,6 +202,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.shoes}
                     name="shoes"
                     type="number"
                     className="form-control"
@@ -218,6 +227,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.laundary}
                     name="laundary"
                     type="number"
                     className="form-control"
@@ -242,6 +252,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.toiletries}
                     name="toiletries"
                     type="number"
                     className="form-control"
@@ -266,6 +277,7 @@ export class LivingPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.dental}
                     name="dental"
                     type="number"
                     className="form-control"

@@ -6,18 +6,19 @@ export class BudgetPlanner extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      summaryIncome: 0,
+      summaryIncome: localStorage.getItem("summaryIncome") || 0,
       summaryExpense: 0,
-      housing: 0,
-      living: 0,
-      travel: 0,
-      ent: 0,
+      housing: localStorage.getItem("housing") || "",
+      living: localStorage.getItem("living") || "",
+      travel: localStorage.getItem("travel") || "",
+      ent: localStorage.getItem("ent"),
     };
   }
 
   setSummaryIncome = (income) => {
     this.setState({ summaryIncome: income }, () => {
       console.log("State Updated", this.state.summaryIncome);
+      localStorage.setItem("summaryIncome", income);
     });
   };
 
@@ -38,25 +39,32 @@ export class BudgetPlanner extends Component {
   setHousingExpense = (expense) => {
     this.setState({ housing: expense }, () => {
       this.setSummaryExpense();
+      localStorage.setItem("housing", expense);
     });
   };
   setLivingExpense = (expense) => {
     this.setState({ living: expense }, () => {
       this.setSummaryExpense();
+      localStorage.setItem("living", expense);
     });
   };
   setTravelExpense = (expense) => {
     this.setState({ travel: expense }, () => {
       this.setSummaryExpense();
+      localStorage.setItem("travel", expense);
     });
   };
   setEntExpense = (expense) => {
     this.setState({ ent: expense }, () => {
       this.setSummaryExpense();
-      console.log(this.ent);
+      localStorage.setItem("ent", expense);
     });
   };
 
+  componentDidMount() {
+    this.setSummaryExpense();
+    this.setSummaryIncome();
+  }
   render() {
     return (
       <div>

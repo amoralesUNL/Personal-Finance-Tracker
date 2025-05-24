@@ -4,14 +4,14 @@ export class TravelPlanner extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      fuel: 0,
-      insurance: 0,
-      loan: 0,
-      maintenance: 0,
-      parking: 0,
-      fares: 0,
-      train: 0,
-      flight: 0,
+      fuel: localStorage.getItem("fuel") || "",
+      insurance: localStorage.getItem("insurance") || "",
+      loan: localStorage.getItem("loan") || "",
+      maintenance: localStorage.getItem("maintenance") || "",
+      parking: localStorage.getItem("parking") || "",
+      fares: localStorage.getItem("fares") || "",
+      train: localStorage.getItem("train") || "",
+      flight: localStorage.getItem("flight") || "",
     };
   }
   handleExpenseChange = (setTravelExpense) => {
@@ -26,7 +26,15 @@ export class TravelPlanner extends Component {
       flight,
     } = this.state;
     let total =
-      fuel + insurance + loan + maintenance + parking + fares + train + flight;
+      (Number(fuel) || 0) +
+      (Number(insurance) || 0) +
+      (Number(loan) || 0) +
+      (Number(maintenance) || 0) +
+      (Number(parking) || 0) +
+      (Number(fares) || 0) +
+      (Number(train) || 0) +
+      (Number(flight) || 0);
+
     setTravelExpense(total);
   };
   handleInputChange = (event, setTravelExpense) => {
@@ -37,6 +45,11 @@ export class TravelPlanner extends Component {
         return { [name]: parseFloat(newValue) };
       },
       () => {
+        if (value === "") {
+          localStorage.removeItem(name);
+        } else {
+          localStorage.setItem(name, value);
+        }
         this.handleExpenseChange(setTravelExpense);
       }
     );
@@ -59,6 +72,7 @@ export class TravelPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.fuel}
                     name="fuel"
                     type="number"
                     className="form-control"
@@ -84,6 +98,7 @@ export class TravelPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.insurance}
                     name="insurance"
                     type="number"
                     className="form-control"
@@ -108,6 +123,7 @@ export class TravelPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.loan}
                     name="loan"
                     type="number"
                     className="form-control"
@@ -132,6 +148,7 @@ export class TravelPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.maintenance}
                     name="maintenance"
                     type="number"
                     className="form-control"
@@ -156,6 +173,7 @@ export class TravelPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.parking}
                     name="parking"
                     type="number"
                     className="form-control"
@@ -180,6 +198,7 @@ export class TravelPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.fares}
                     name="fares"
                     type="number"
                     className="form-control"
@@ -204,6 +223,7 @@ export class TravelPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.train}
                     name="train"
                     type="number"
                     className="form-control"
@@ -228,6 +248,7 @@ export class TravelPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.flight}
                     name="flight"
                     type="number"
                     className="form-control"
