@@ -4,30 +4,45 @@ export class EntertainmentPlanner extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      movie: 0,
-      tv: 0,
-      hobby: 0,
-      health: 0,
-      lottery: 0,
-      bus: 0,
-      holiday: 0,
-      event: 0,
+      movie: localStorage.getItem("movie") || "",
+      tv: localStorage.getItem("tv") || "",
+      hobby: localStorage.getItem("hobby") || "",
+      health: localStorage.getItem("health") || "",
+      lottery: localStorage.getItem("lottery") || "",
+      bus: localStorage.getItem("bus") || "",
+      holiday: localStorage.getItem("holiday") || "",
+      birthday: localStorage.getItem("birthday") || "",
+      event: localStorage.getItem("ent") || "",
     };
   }
   handleExpenseChange = (setEntExpense) => {
-    const { movie, tv, hobby, health, lottery, bus, holiday, event } =
+    const { movie, tv, hobby, health, lottery, bus, holiday, birthday, event } =
       this.state;
-    let total = movie + tv + hobby + health + lottery + holiday + bus + event;
+    let total =
+      (Number(movie) || 0) +
+      (Number(tv) || 0) +
+      (Number(hobby) || 0) +
+      (Number(health) || 0) +
+      (Number(lottery) || 0) +
+      (Number(bus) || 0) +
+      (Number(holiday) || 0) +
+      (Number(birthday) || 0) +
+      (Number(event) || 0);
     setEntExpense(total);
   };
   handleInputChange = (event, setEntExpense) => {
     const { name, value } = event.target;
-    const newValue = value === "" ? 0 : Number(value);
+
     this.setState(
       (prevState) => {
-        return { [name]: parseFloat(newValue) };
+        return { [name]: parseFloat(value) };
       },
       () => {
+        if (value === "") {
+          localStorage.removeItem(name);
+        } else {
+          localStorage.setItem(name, value);
+        }
         this.handleExpenseChange(setEntExpense);
       }
     );
@@ -51,6 +66,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.movie}
                     name="movie"
                     type="number"
                     className="form-control"
@@ -76,6 +92,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.tv}
                     name="tv"
                     type="number"
                     className="form-control"
@@ -100,6 +117,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.hobby}
                     name="hobby"
                     type="number"
                     className="form-control"
@@ -124,6 +142,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.health}
                     name="health"
                     type="number"
                     className="form-control"
@@ -148,6 +167,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.lottery}
                     name="lottery"
                     type="number"
                     className="form-control"
@@ -172,6 +192,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.bus}
                     name="bus"
                     type="number"
                     className="form-control"
@@ -196,6 +217,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.holiday}
                     name="holiday"
                     type="number"
                     className="form-control"
@@ -220,6 +242,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.birthday}
                     name="birthday"
                     type="number"
                     className="form-control"
@@ -244,6 +267,7 @@ export class EntertainmentPlanner extends Component {
                     $
                   </span>
                   <input
+                    value={this.state.event}
                     name="event"
                     type="number"
                     className="form-control"

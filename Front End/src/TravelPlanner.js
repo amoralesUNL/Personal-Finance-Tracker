@@ -39,10 +39,10 @@ export class TravelPlanner extends Component {
   };
   handleInputChange = (event, setTravelExpense) => {
     const { name, value } = event.target;
-    const newValue = value === "" ? 0 : Number(value);
+
     this.setState(
       (prevState) => {
-        return { [name]: parseFloat(newValue) };
+        return { [name]: parseFloat(value) };
       },
       () => {
         if (value === "") {
