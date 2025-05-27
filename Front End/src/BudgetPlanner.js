@@ -17,7 +17,6 @@ export class BudgetPlanner extends Component {
 
   setSummaryIncome = (income) => {
     this.setState({ summaryIncome: income }, () => {
-      console.log("State Updated", this.state.summaryIncome);
       localStorage.setItem("summaryIncome", income);
     });
   };
@@ -63,7 +62,6 @@ export class BudgetPlanner extends Component {
 
   componentDidMount() {
     this.setSummaryExpense();
-    this.setSummaryIncome();
   }
   render() {
     return (

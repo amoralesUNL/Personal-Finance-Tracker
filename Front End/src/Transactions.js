@@ -26,6 +26,17 @@ export class Transactionspage extends Component {
     const { transactions } = this.state;
     return (
       <div>
+        <div>
+          <button type="button" class="btn btn-primary">
+            Add Transaction
+          </button>
+          <button type="button" class="btn btn-primary">
+            Edit Transaction
+          </button>
+          <button type="button" class="btn btn-primary">
+            Upload CSV
+          </button>
+        </div>
         <table className="table table-stripend">
           <thead>
             <tr>
