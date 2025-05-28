@@ -5,6 +5,7 @@ export class Transactionspage extends Component {
     super(props);
     this.state = {
       transactions: [],
+      showModal: true,
     };
   }
   refreshList() {
@@ -16,6 +17,22 @@ export class Transactionspage extends Component {
       })
       .catch((error) => {
         console.error("Error fetching transactions:", error);
+      });
+  }
+
+  uploadCsvForm(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    fetch(variables.API_URL + "transaction/upload-csv", {
+      method: "POST",
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((result) => {
+        console.log("Upload Success", result);
+      })
+      .catch((error) => {
+        console.log("Upload Failed", error);
       });
   }
 
@@ -33,9 +50,51 @@ export class Transactionspage extends Component {
           <button type="button" class="btn btn-primary">
             Edit Transaction
           </button>
-          <button type="button" class="btn btn-primary">
+          <button
+            type="button"
+            class="btn btn-primary"
+            onClick={() => this.setState({ showModal: true })}
+          >
             Upload CSV
           </button>
+          {/*Modal Window*/}
+          {this.state.showModal && (
+            <div
+              className="modal fade show d-block "
+              tabIndex="-1"
+              style={{ backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+            >
+              <div className="modal-dialog" role="document">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h5 className="modal-title w-100" id="exampleModalLabel">
+                      Upload CSV
+                    </h5>
+                    <button
+                      type="button"
+                      className="close"
+                      onClick={() => this.setState({ showModal: false })}
+                    >
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div className="modal-body">...</div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-secondary"
+                      onClick={() => this.setState({ showModal: false })}
+                    >
+                      Close
+                    </button>
+                    <button type="button" className="btn btn-primary">
+                      Save changes
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
         <table className="table table-stripend">
           <thead>
