@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using System.Data;
 using Microsoft.Data.SqlClient;
+using System.Runtime.CompilerServices;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -12,9 +13,13 @@ namespace PersonalFinanceTracker.Controllers
     public class TransactionController : Controller
     {
         public readonly IConfiguration _configuration;
+        //Not Yet Working
+        private readonly AppDbContext _context;
         public TransactionController(IConfiguration configuration)
         {
             _configuration = configuration;
+            //Not Yet Working
+            _context = context;
         }
 
         private static readonly string[] IncomeTypes = new[]
@@ -243,7 +248,25 @@ namespace PersonalFinanceTracker.Controllers
 
             return new JsonResult(table);
         }
+
+        [HttpPost("upload-csv")]
+        public async Task<IActionResult> uploadCSV(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest("File Empty or Invalid");
+
+            using (var stream = new StreamReader(file.OpenReadStream())) {
+                var csvContent = await stream.ReadToEndAsync();
+                var transactions = CsvParser.Parse(csvContent);
+                //Not Yet Working
+                _context.Transactions.AddRange(transactions);
+                await _context.SaveChangesAsync();
+
+                return Ok();
+            }
+        } 
     }
+
 
    
  }

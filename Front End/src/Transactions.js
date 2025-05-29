@@ -5,7 +5,7 @@ export class Transactionspage extends Component {
     super(props);
     this.state = {
       transactions: [],
-      showModal: true,
+      showModal: false,
     };
   }
   refreshList() {
@@ -88,7 +88,7 @@ export class Transactionspage extends Component {
                       Close
                     </button>
                     <button type="button" className="btn btn-primary">
-                      Save changes
+                      Done
                     </button>
                   </div>
                 </div>
