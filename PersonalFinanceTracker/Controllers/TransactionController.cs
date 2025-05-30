@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Runtime.CompilerServices;
+using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Controllers
 {
@@ -13,12 +14,10 @@ namespace PersonalFinanceTracker.Controllers
     public class TransactionController : Controller
     {
         public readonly IConfiguration _configuration;
-        //Not Yet Working
         private readonly AppDbContext _context;
-        public TransactionController(IConfiguration configuration)
+        public TransactionController(IConfiguration configuration, AppDbContext context)
         {
             _configuration = configuration;
-            //Not Yet Working
             _context = context;
         }
 
