@@ -6,6 +6,7 @@ export class Transactionspage extends Component {
     this.state = {
       transactions: [],
       showModal: false,
+      selectedFile: null,
     };
   }
   refreshList() {
@@ -19,10 +20,15 @@ export class Transactionspage extends Component {
         console.error("Error fetching transactions:", error);
       });
   }
-
-  uploadCsvForm(file) {
+  onFileChange = (event) => {
+    this.setState({ selectedFile: event.target.files[0] });
+  };
+  csvUpload = () => {
     const formData = new FormData();
-    formData.append("file", file);
+    formData.append("myFile", this.state.selectedFile);
+
+    console.log(this.state.selectedFile.name);
+
     fetch(variables.API_URL + "transaction/upload-csv", {
       method: "POST",
       body: formData,
@@ -34,7 +40,7 @@ export class Transactionspage extends Component {
       .catch((error) => {
         console.log("Upload Failed", error);
       });
-  }
+  };
 
   componentDidMount() {
     this.refreshList();
@@ -78,7 +84,9 @@ export class Transactionspage extends Component {
                       <span aria-hidden="true">&times;</span>
                     </button>
                   </div>
-                  <div className="modal-body">...</div>
+                  <div className="modal-body">
+                    <input type="file" onChange={this.onFileChange} />
+                  </div>
                   <div className="modal-footer">
                     <button
                       type="button"
@@ -87,7 +95,11 @@ export class Transactionspage extends Component {
                     >
                       Close
                     </button>
-                    <button type="button" className="btn btn-primary">
+                    <button
+                      type="button"
+                      className="btn btn-primary"
+                      onClick={this.csvUpload}
+                    >
                       Done
                     </button>
                   </div>
