@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using System.Data;
 using Microsoft.Data.SqlClient;
 using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
 using PersonalFinanceTracker.Models;
 
 namespace PersonalFinanceTracker.Controllers
@@ -251,17 +252,22 @@ namespace PersonalFinanceTracker.Controllers
         [HttpPost("upload-csv")]
         public async Task<IActionResult> uploadCSV(IFormFile file)
         {
-            if (file == null || file.Length == 0)
+           if (file == null || file.Length == 0)
                 return BadRequest("File Empty or Invalid");
+
+           
 
             using (var stream = new StreamReader(file.OpenReadStream())) {
                 var csvContent = await stream.ReadToEndAsync();
                 var transactions = CsvParser.Parse(csvContent);
-                //Not Yet Working
-                _context.Transactions.AddRange(transactions);
-                await _context.SaveChangesAsync();
 
-                return Ok();
+                Console.WriteLine("Uploaded CSV Content:");
+                Console.WriteLine(csvContent);
+
+                //_context.Transactions.AddRange(transactions);
+                //await _context.SaveChangesAsync();
+
+                return Ok(new { message = "Upload successful"});
             }
         } 
     }

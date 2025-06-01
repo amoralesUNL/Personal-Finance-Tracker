@@ -25,7 +25,7 @@ export class Transactionspage extends Component {
   };
   csvUpload = () => {
     const formData = new FormData();
-    formData.append("myFile", this.state.selectedFile);
+    formData.append("file", this.state.selectedFile);
 
     console.log(this.state.selectedFile.name);
 
